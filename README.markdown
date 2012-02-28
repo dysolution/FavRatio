@@ -3,7 +3,7 @@
 FavRatio is intended to be two things:
 
 1. A fav aggregator site with features other sites don't have, such as FavWeight.
-1. A way to learn about the Twitter API as well as the community that uses Twitter's "favorite" feature through the use of a freely-available open source Django application.
+1. A way to learn about the Twitter API as well as the community that uses Twitter's "favorite" feature through the use of a freely-available open source Rails application.
 
 FavRatio is different to other fav aggregators:
 
@@ -46,6 +46,6 @@ And if it can't, you can modify the code so it can.
 
 To the extent possible and practical, every part of FavRatio is designed to be open and freely available to be shared, understood, and improved upon by the community.
 
-* The Django source code is available at https://svn.favratio.com/favratio/trunk.
+* The Rails source code is available at: https://github.com/dysolution/FavRatio
 * The FavWeight algorithms are within the source code and are documented in this wiki.
 * Unless otherwise specified, all FavRatio code is licensed with the [http://www.gnu.org/licenses/gpl.html GPL] version 3.
