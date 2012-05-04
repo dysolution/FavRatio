@@ -1,0 +1,77 @@
+<%= form_for(@twitter_user) do |f| %>
+  <% if @twitter_user.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@twitter_user.errors.count, "error") %> prohibited this twitter_user from being saved:</h2>
+
+      <ul>
+      <% @twitter_user.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :twitter_uid %><br />
+    <%= f.text_field :twitter_uid %>
+  </div>
+  <div class="field">
+    <%= f.label :twitter_username %><br />
+    <%= f.text_field :twitter_username %>
+  </div>
+  <div class="field">
+    <%= f.label :avatar_url %><br />
+    <%= f.text_field :avatar_url %>
+  </div>
+  <div class="field">
+    <%= f.label :crawl_interval %><br />
+    <%= f.number_field :crawl_interval %>
+  </div>
+  <div class="field">
+    <%= f.label :latest_crawl_fav_count %><br />
+    <%= f.number_field :latest_crawl_fav_count %>
+  </div>
+  <div class="field">
+    <%= f.label :last_refreshed_from_twitter %><br />
+    <%= f.datetime_select :last_refreshed_from_twitter %>
+  </div>
+  <div class="field">
+    <%= f.label :followers_count %><br />
+    <%= f.number_field :followers_count %>
+  </div>
+  <div class="field">
+    <%= f.label :favorites_count %><br />
+    <%= f.number_field :favorites_count %>
+  </div>
+  <div class="field">
+    <%= f.label :friends_count %><br />
+    <%= f.number_field :friends_count %>
+  </div>
+  <div class="field">
+    <%= f.label :statuses_count %><br />
+    <%= f.number_field :statuses_count %>
+  </div>
+  <div class="field">
+    <%= f.label :created_at %><br />
+    <%= f.datetime_select :created_at %>
+  </div>
+  <div class="field">
+    <%= f.label :ready_to_be_crawled %><br />
+    <%= f.check_box :ready_to_be_crawled %>
+  </div>
+  <div class="field">
+    <%= f.label :crawling_enabled %><br />
+    <%= f.check_box :crawling_enabled %>
+  </div>
+  <div class="field">
+    <%= f.label :latest_crawl_time %><br />
+    <%= f.datetime_select :latest_crawl_time %>
+  </div>
+  <div class="field">
+    <%= f.label :next_crawl_time %><br />
+    <%= f.datetime_select :next_crawl_time %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

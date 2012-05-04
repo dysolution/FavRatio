@@ -1,0 +1,39 @@
+<h1>Listing tweets</h1>
+
+<table>
+  <tr>
+    <th>Twitter uid</th>
+    <th>Text</th>
+    <th>Twitter user</th>
+    <th>Timestamp</th>
+    <th>Is atreply</th>
+    <th>Fav count</th>
+    <th>Fav weight</th>
+    <th>Favs per follower</th>
+    <th>Hash</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @tweets.each do |tweet| %>
+  <tr>
+    <td><%= tweet.twitter_uid %></td>
+    <td><%= tweet.text %></td>
+    <td><%= tweet.twitter_user_id %></td>
+    <td><%= tweet.timestamp %></td>
+    <td><%= tweet.is_atreply %></td>
+    <td><%= tweet.fav_count %></td>
+    <td><%= tweet.fav_weight %></td>
+    <td><%= tweet.favs_per_follower %></td>
+    <td><%= tweet.hash %></td>
+    <td><%= link_to 'Show', tweet %></td>
+    <td><%= link_to 'Edit', edit_tweet_path(tweet) %></td>
+    <td><%= link_to 'Destroy', tweet, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Tweet', new_tweet_path %>

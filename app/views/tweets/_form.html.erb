@@ -1,0 +1,53 @@
+<%= form_for(@tweet) do |f| %>
+  <% if @tweet.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@tweet.errors.count, "error") %> prohibited this tweet from being saved:</h2>
+
+      <ul>
+      <% @tweet.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :twitter_uid %><br />
+    <%= f.text_field :twitter_uid %>
+  </div>
+  <div class="field">
+    <%= f.label :text %><br />
+    <%= f.text_area :text %>
+  </div>
+  <div class="field">
+    <%= f.label :twitter_user_id %><br />
+    <%= f.number_field :twitter_user_id %>
+  </div>
+  <div class="field">
+    <%= f.label :timestamp %><br />
+    <%= f.datetime_select :timestamp %>
+  </div>
+  <div class="field">
+    <%= f.label :is_atreply %><br />
+    <%= f.check_box :is_atreply %>
+  </div>
+  <div class="field">
+    <%= f.label :fav_count %><br />
+    <%= f.number_field :fav_count %>
+  </div>
+  <div class="field">
+    <%= f.label :fav_weight %><br />
+    <%= f.text_field :fav_weight %>
+  </div>
+  <div class="field">
+    <%= f.label :favs_per_follower %><br />
+    <%= f.text_field :favs_per_follower %>
+  </div>
+  <div class="field">
+    <%= f.label :hash %><br />
+    <%= f.text_field :hash %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

@@ -1,0 +1,80 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Twitter uid:</b>
+  <%= @twitter_user.twitter_uid %>
+</p>
+
+<p>
+  <b>Twitter username:</b>
+  <%= @twitter_user.twitter_username %>
+</p>
+
+<p>
+  <b>Avatar url:</b>
+  <%= @twitter_user.avatar_url %>
+</p>
+
+<p>
+  <b>Crawl interval:</b>
+  <%= @twitter_user.crawl_interval %>
+</p>
+
+<p>
+  <b>Latest crawl fav count:</b>
+  <%= @twitter_user.latest_crawl_fav_count %>
+</p>
+
+<p>
+  <b>Last refreshed from twitter:</b>
+  <%= @twitter_user.last_refreshed_from_twitter %>
+</p>
+
+<p>
+  <b>Followers count:</b>
+  <%= @twitter_user.followers_count %>
+</p>
+
+<p>
+  <b>Favorites count:</b>
+  <%= @twitter_user.favorites_count %>
+</p>
+
+<p>
+  <b>Friends count:</b>
+  <%= @twitter_user.friends_count %>
+</p>
+
+<p>
+  <b>Statuses count:</b>
+  <%= @twitter_user.statuses_count %>
+</p>
+
+<p>
+  <b>Created at:</b>
+  <%= @twitter_user.created_at %>
+</p>
+
+<p>
+  <b>Ready to be crawled:</b>
+  <%= @twitter_user.ready_to_be_crawled %>
+</p>
+
+<p>
+  <b>Crawling enabled:</b>
+  <%= @twitter_user.crawling_enabled %>
+</p>
+
+<p>
+  <b>Latest crawl time:</b>
+  <%= @twitter_user.latest_crawl_time %>
+</p>
+
+<p>
+  <b>Next crawl time:</b>
+  <%= @twitter_user.next_crawl_time %>
+</p>
+
+
+<%= link_to 'Edit', edit_twitter_user_path(@twitter_user) %> |
+<%= link_to 'Back', twitter_users_path %>
