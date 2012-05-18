@@ -82,7 +82,7 @@ class TwitterUsersController < ApplicationController
     end
   end
 
-  # GET /twitter_users/1
+  # GET /twitter_users/1/refresh_from_twitter
   def refresh_from_twitter
     @twitter_user = TwitterUser.find(params[:id])
     info_from_twitter = Twitter.user(@twitter_user.twitter_uid.to_i)
