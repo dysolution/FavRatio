@@ -23,8 +23,8 @@ ActiveRecord::Schema.define(:version => 20120228212422) do
     t.float    "fav_weight"
     t.float    "favs_per_follower"
     t.string   "hash"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
   end
 
   create_table "twitter_users", :force => true do |t|
@@ -38,12 +38,12 @@ ActiveRecord::Schema.define(:version => 20120228212422) do
     t.integer  "favorites_count"
     t.integer  "friends_count"
     t.integer  "statuses_count"
-    t.datetime "created_at"
+    t.datetime "created_at",                  :null => false
     t.boolean  "ready_to_be_crawled"
     t.boolean  "crawling_enabled"
     t.datetime "latest_crawl_time"
     t.datetime "next_crawl_time"
-    t.datetime "updated_at"
+    t.datetime "updated_at",                  :null => false
   end
 
 end
