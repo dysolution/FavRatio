@@ -78,3 +78,8 @@
 
 <%= link_to 'Edit', edit_twitter_user_path(@twitter_user) %> |
 <%= link_to 'Back', twitter_users_path %>
+
+<h2>Follower IDs:</h2>
+<% @follower_ids.each do |id| %>
+  <p><%= id %></p>
+<% end %>

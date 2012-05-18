@@ -3,6 +3,8 @@ Favratio::Application.routes.draw do
 
   resources :twitter_users
 
+  match 'twitter_users/:id/refresh_from_twitter' => 'twitter_users#refresh_from_twitter'
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

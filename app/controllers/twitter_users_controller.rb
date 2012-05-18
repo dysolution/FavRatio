@@ -14,6 +14,7 @@ class TwitterUsersController < ApplicationController
   # GET /twitter_users/1.json
   def show
     @twitter_user = TwitterUser.find(params[:id])
+    @follower_ids = Twitter.follower_ids(@twitter_user.twitter_username).collection
 
     respond_to do |format|
       format.html # show.html.erb
@@ -78,6 +79,28 @@ class TwitterUsersController < ApplicationController
     respond_to do |format|
       format.html { redirect_to twitter_users_url }
       format.json { head :ok }
+    end
+  end
+
+  # GET /twitter_users/1
+  def refresh_from_twitter
+    @twitter_user = TwitterUser.find(params[:id])
+    info_from_twitter = Twitter.user(@twitter_user.twitter_uid.to_i)
+    attr = {
+      :followers_count   => info_from_twitter.followers_count,
+      :favorites_count   => info_from_twitter.favourites_count,
+      :friends_count     => info_from_twitter.friends_count,
+      :avatar_url        => info_from_twitter.profile_image_url,
+      :statuses_count    => info_from_twitter.statuses_count
+    }
+    respond_to do |format|
+      if @twitter_user.update_attributes(attr)
+        format.html { redirect_to @twitter_user, notice: 'Twitter user was successfully updated with the latest info from Twitter.' }
+        format.json { head :ok }
+      else
+        format.html { redirect_to @twitter_user, error: 'Unable to update attributes.' }
+        format.json { render json: @twitter_user.errors, status: :unprocessable_entity }
+      end
     end
   end
 end
