@@ -1,4 +1,6 @@
 Favratio::Application.routes.draw do
+  resources :favs
+
   resources :tweets
 
   resources :twitter_users

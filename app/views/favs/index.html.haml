@@ -1,0 +1,19 @@
+%h1 Listing favs
+
+%table
+  %tr
+    %th Tweet
+    %th
+    %th
+    %th
+
+  - @favs.each do |fav|
+    %tr
+      %td= fav.tweet_id
+      %td= link_to 'Show', fav
+      %td= link_to 'Edit', edit_fav_path(fav)
+      %td= link_to 'Destroy', fav, :confirm => 'Are you sure?', :method => :delete
+
+%br
+
+= link_to 'New Fav', new_fav_path

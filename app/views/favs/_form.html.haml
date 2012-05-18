@@ -1,0 +1,13 @@
+= form_for @fav do |f|
+  -if @fav.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@fav.errors.count, "error")} prohibited this fav from being saved:"
+      %ul
+        - @fav.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :tweet_id
+    = f.number_field :tweet_id
+  .actions
+    = f.submit 'Save'

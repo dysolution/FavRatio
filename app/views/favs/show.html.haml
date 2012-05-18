@@ -1,0 +1,9 @@
+%p#notice= notice
+
+%p
+  %b Tweet:
+  = @fav.tweet_id
+
+= link_to 'Edit', edit_fav_path(@fav)
+\|
+= link_to 'Back', favs_path
