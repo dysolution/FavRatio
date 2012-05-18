@@ -11,7 +11,13 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120228212422) do
+ActiveRecord::Schema.define(:version => 20120518211507) do
+
+  create_table "favs", :force => true do |t|
+    t.integer  "tweet_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "tweets", :force => true do |t|
     t.string   "twitter_uid"
@@ -22,7 +28,6 @@ ActiveRecord::Schema.define(:version => 20120228212422) do
     t.integer  "fav_count"
     t.float    "fav_weight"
     t.float    "favs_per_follower"
-    t.string   "hash"
     t.datetime "created_at",        :null => false
     t.datetime "updated_at",        :null => false
   end
