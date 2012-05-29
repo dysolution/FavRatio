@@ -22,6 +22,10 @@
 #
 
 class TwitterUser < ActiveRecord::Base
+
+	has_many :favs
+	has_many :tweets
+	
 	def get_favs
 		# get the latest 20 favs for this user
     Twitter.favorites(twitter_uid.to_i)

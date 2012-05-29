@@ -109,8 +109,17 @@ class TwitterUsersController < ApplicationController
     @twitter_user = TwitterUser.find(params[:id])
     @favs = @twitter_user.get_favs
     @favs.each do |fav|
-      # create it if it doesn't already exist
-      Fav.create!(:faver => @twitter_user, :tweet_id => fav.id)
+      # create the tweet if necessary
+      tweet_attr = {
+        :twitter_uid => fav.id,
+        :text => fav.text,
+        :twitter_user_id => @twitter_user.id,
+        :timestamp => fav.created_at
+      }
+      Tweet.create!(tweet_attr)
+
+      # create the fav if necessary
+      Fav.create(:faver_id => @twitter_user.id, :tweet_id => fav.id)
     end
     respond_to do |format|
       format.html # crawl.html.erb

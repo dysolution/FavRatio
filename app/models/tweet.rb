@@ -17,4 +17,5 @@
 
 class Tweet < ActiveRecord::Base
   has_many :favs
+  belongs_to :twitter_user
 end
