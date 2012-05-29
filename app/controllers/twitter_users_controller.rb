@@ -103,4 +103,18 @@ class TwitterUsersController < ApplicationController
       end
     end
   end
+
+  # GET /twitter_users/1/crawl
+  def crawl
+    @twitter_user = TwitterUser.find(params[:id])
+    @favs = @twitter_user.get_favs
+    @favs.each do |fav|
+      # create it if it doesn't already exist
+      Fav.create!(:faver => @twitter_user, :tweet_id => fav.id)
+    end
+    respond_to do |format|
+      format.html # crawl.html.erb
+      format.json { render json: @twitter_users }
+    end
+  end
 end
