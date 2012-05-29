@@ -116,7 +116,7 @@ class TwitterUsersController < ApplicationController
         :twitter_user_id => @twitter_user.id,
         :timestamp => fav.created_at
       }
-      Tweet.create!(tweet_attr)
+      Tweet.create(tweet_attr)
 
       # create the fav if necessary
       Fav.create(:faver_id => @twitter_user.id, :tweet_id => fav.id)
