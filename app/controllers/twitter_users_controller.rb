@@ -118,8 +118,8 @@ class TwitterUsersController < ApplicationController
       }
       Tweet.create(tweet_attr)
 
-      # create the favored_tweet if necessary
-      favored_tweet.create(:faver_id => @twitter_user.id, :tweet_id => favored_tweet.id)
+      # create the fav if necessary
+      Fav.create(:faver_id => @twitter_user.id, :tweet_id => favored_tweet.id)
     end
     respond_to do |format|
       format.html # crawl.html.erb
