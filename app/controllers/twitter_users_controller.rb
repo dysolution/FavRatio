@@ -84,17 +84,9 @@ class TwitterUsersController < ApplicationController
 
   # GET /twitter_users/1/refresh_from_twitter
   def refresh_from_twitter
-    @twitter_user = TwitterUser.find(params[:id])
-    info_from_twitter = Twitter.user(@twitter_user.twitter_uid.to_i)
-    attr = {
-      :followers_count   => info_from_twitter.followers_count,
-      :favorites_count   => info_from_twitter.favourites_count,
-      :friends_count     => info_from_twitter.friends_count,
-      :avatar_url        => info_from_twitter.profile_image_url,
-      :statuses_count    => info_from_twitter.statuses_count
-    }
+    @twitter_user = TwitterUser.find(params[:id])    
     respond_to do |format|
-      if @twitter_user.update_attributes(attr)
+      if @twitter_user.refresh_from_twitter
         format.html { redirect_to @twitter_user, notice: 'Twitter user was successfully updated with the latest info from Twitter.' }
         format.json { head :ok }
       else
