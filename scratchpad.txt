@@ -7,8 +7,10 @@ Are the data models set up correctly?
   Tweet.fav.faver is a TwitterUser
   Tweet.author is a TwitterUser
 
-
 How and at what level should I handle exceptions thrown by Twitter module (rate limit, FailWhale, etc.)?
 
 Is there a good way to set up tests that don't require interaction with Twitter?
 
+Best way to incorporate OAuth-credentialed requests?
+  Some kind of wrapper for all calls to Twitter module?
+  How/where to store credentials to keep them out of repo? File format?
