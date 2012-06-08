@@ -1,0 +1,14 @@
+Is crawl() in the right place (TwitterUser controller, but creates tweets and favs)? If it were in the TwitterUser model instead, would that be poor design?
+
+Where would I put the master crawl() method...the one that crawls all targets?
+
+Are the data models set up correctly?
+  Want the ability to query TwitterUser.favs_earned and favs_given.
+  Tweet.fav.faver is a TwitterUser
+  Tweet.author is a TwitterUser
+
+
+How and at what level should I handle exceptions thrown by Twitter module (rate limit, FailWhale, etc.)?
+
+Is there a good way to set up tests that don't require interaction with Twitter?
+
