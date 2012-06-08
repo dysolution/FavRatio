@@ -108,18 +108,18 @@ class TwitterUsersController < ApplicationController
   def crawl
     @twitter_user = TwitterUser.find(params[:id])
     @favs = @twitter_user.get_favs
-    @favs.each do |fav|
+    @favs.each do |favored_tweet|
       # create the tweet if necessary
       tweet_attr = {
-        :twitter_uid => fav.id,
-        :text => fav.text,
+        :twitter_uid => favored_tweet.id,
+        :text => favored_tweet.text,
         :twitter_user_id => @twitter_user.id,
-        :timestamp => fav.created_at
+        :timestamp => favored_tweet.created_at
       }
       Tweet.create(tweet_attr)
 
-      # create the fav if necessary
-      Fav.create(:faver_id => @twitter_user.id, :tweet_id => fav.id)
+      # create the favored_tweet if necessary
+      favored_tweet.create(:faver_id => @twitter_user.id, :tweet_id => favored_tweet.id)
     end
     respond_to do |format|
       format.html # crawl.html.erb
