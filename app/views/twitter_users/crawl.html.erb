@@ -1,9 +1,7 @@
 <h1>Crawl results</h1>
 
-<table>
+<ol>
 <% @favs.each do |fav| %>
-  <tr>
-    <td><%= fav.text %></td>    
-  </tr>
+  <li><%= fav.text %></li>    
 <% end %>
-</table>
+</ol>
