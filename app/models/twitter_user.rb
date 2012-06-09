@@ -23,7 +23,7 @@
 
 class TwitterUser < ActiveRecord::Base
 
-	has_many :favs
+	has_many :favs, :foreign_key => 'faver_id'
 	has_many :tweets
 
 	def self.refresh_crawl_targets
