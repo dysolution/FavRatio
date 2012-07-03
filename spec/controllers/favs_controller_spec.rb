@@ -24,7 +24,7 @@ describe FavsController do
   # Fav. As you add validations to Fav, be sure to
   # update the return value of this method accordingly.
   def valid_attributes
-    {}
+    {:tweet_id => 1, :faver_id => 1}
   end
   
   # This should return the minimal set of values that should be in the session

@@ -12,5 +12,8 @@
 require 'spec_helper'
 
 describe Fav do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it 'should respond to "faver"' do
+  	fav = Fav.new
+  	fav.should respond_to :faver
+  end
 end
