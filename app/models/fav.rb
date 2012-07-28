@@ -1,14 +1,3 @@
-# == Schema Information
-#
-# Table name: favs
-#
-#  id         :integer         not null, primary key
-#  tweet_id   :integer
-#  created_at :datetime        not null
-#  updated_at :datetime        not null
-#  faver_id   :integer
-#
-
 class Fav < ActiveRecord::Base
   attr_accessible :tweet_id, :faver_id
   belongs_to :tweet
@@ -19,3 +8,15 @@ class Fav < ActiveRecord::Base
   validates_uniqueness_of :tweet_id, :scope => :faver_id
 
 end
+
+# == Schema Information
+#
+# Table name: favs
+#
+#  id         :integer          not null, primary key
+#  tweet_id   :integer
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  faver_id   :integer
+#
+

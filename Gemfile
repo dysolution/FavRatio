@@ -24,7 +24,7 @@ group :assets do
 end
 
 group :development do
-	gem 'annotate', '~> 2.4.1.beta'
+  gem 'annotate', ">=2.5.0"
   gem 'pry'
 end
 
