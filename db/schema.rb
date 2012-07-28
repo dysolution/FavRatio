@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120529203321) do
+ActiveRecord::Schema.define(:version => 20120728195944) do
 
   create_table "favs", :force => true do |t|
     t.integer  "tweet_id"
@@ -23,7 +23,7 @@ ActiveRecord::Schema.define(:version => 20120529203321) do
   create_table "tweets", :force => true do |t|
     t.string   "twitter_uid"
     t.text     "text"
-    t.integer  "twitter_user_id"
+    t.integer  "author_id"
     t.datetime "timestamp"
     t.boolean  "is_atreply"
     t.integer  "fav_count"
