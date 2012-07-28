@@ -1,10 +1,31 @@
 require 'spec_helper'
 
-describe TwitterUser do
-  it "should have a 'crawl' method" do
-    twitter_user = TwitterUser.new
-    twitter_user.should respond_to(:crawl)
+describe "Twitter User management" do
+
+  before do
+    tu1 = TwitterUser.create(crawling_enabled: true)
+    tu2 = TwitterUser.create(crawling_enabled: false)
   end
+
+  it "should know which Twitter users to crawl" do
+    TwitterUser.crawlable.should_not be_empty
+  end
+
+  it "should be able to crawl all crawlable users" do
+    TwitterUser.should respond_to(:crawl_all)
+  end
+end
+
+describe TwitterUser do
+  before { @user = TwitterUser.new }
+  subject { @user }
+
+  it { should respond_to(:crawl) }
+
+  it "should know about tweets it has faved" do
+    @user.tweets.should be_an(Array)
+  end
+
 end
 
 # == Schema Information

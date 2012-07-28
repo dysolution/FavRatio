@@ -3,7 +3,15 @@ class TwitterUser < ActiveRecord::Base
 	has_many :favs, foreign_key: 'faver_id'
 	has_many :tweets, foreign_key: 'author_id'
 
-	def self.refresh_crawl_targets
+  scope :crawlable, where(crawling_enabled: true)
+
+  def self.crawl_all
+    self.crawlable.each do |user|
+      user.crawl
+      end
+  end
+
+	def self.refresh_crawlable_users
 		# only crawl people who are following @FavRatio
 		follower_ids = Twitter.follower_ids("FavRatio").collection[0,3]
 		follower_ids.each do |tu|
