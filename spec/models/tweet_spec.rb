@@ -1,14 +1,34 @@
 require 'spec_helper'
 
 describe Tweet do
-  it "should have a relation to its author" do 
-    Tweet.new.should respond_to(:author)
+
+  before { @tweet = Tweet.new(author_id: 1, text: "foo") }
+  subject { @tweet }
+
+  describe "blank text" do
+    before { @tweet.text = "" }
+    it { should_not be_valid }
+  end
+  
+  describe "text isn't present" do
+    before { @tweet.text = nil }
+    it { should_not be_valid }
+  end
+
+  describe "author isn't present" do
+    before { @tweet.author_id = nil }
+    it { should_not be_valid }
+  end
+
+  describe "text is too long" do
+    before { @tweet.text = "a" * 141 }
+    it { should_not be_valid }
   end
 
   it "should find its author correctly" do
     user = TwitterUser.create!
-    tweet = user.tweets.create!
-    tweet.author.should == user
+    user.tweets << @tweet
+    @tweet.author.should == user
   end
 end
 

@@ -1,7 +1,7 @@
 class TwitterUser < ActiveRecord::Base
 
-	has_many :favs, :foreign_key => 'faver_id'
-	has_many :tweets, :foreign_key => 'author_id'
+	has_many :favs, foreign_key: 'faver_id'
+	has_many :tweets, foreign_key: 'author_id'
 
 	def self.refresh_crawl_targets
 		# only crawl people who are following @FavRatio

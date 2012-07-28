@@ -1,7 +1,9 @@
 class Tweet < ActiveRecord::Base
   has_many :favs
-  belongs_to :author, :class_name => "TwitterUser"
-  #belongs_to :twitter_user
+  belongs_to :author, class_name: "TwitterUser"
+  validates :text, presence: true,
+            length: { maximum: 140 }
+  validates :author_id, presence: true
 end
 
 # == Schema Information
