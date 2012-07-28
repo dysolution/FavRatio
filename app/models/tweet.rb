@@ -17,5 +17,6 @@
 
 class Tweet < ActiveRecord::Base
   has_many :favs
-  belongs_to :twitter_user
+  belongs_to :author, :class_name => "TwitterUser", :foreign_key => "twitter_user_id"
+  #belongs_to :twitter_user
 end
