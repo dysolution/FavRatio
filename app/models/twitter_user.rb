@@ -51,7 +51,7 @@ class TwitterUser < ActiveRecord::Base
       tweet_attr = {
         :twitter_uid => favored_tweet.id,
         :text => favored_tweet.text,
-        :twitter_user_id => author.id,
+        :author_id => author.id,
         :timestamp => favored_tweet.created_at
       }
       t = Tweet.create(tweet_attr)
