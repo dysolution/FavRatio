@@ -33,7 +33,7 @@ class TwitterUser < ActiveRecord::Base
 		end
 	end
 
-  class FavSource
+  class FavProvider
     def initialize(twitter_uid)
       @twitter_uid_int = twitter_uid.to_i
     end
@@ -45,10 +45,11 @@ class TwitterUser < ActiveRecord::Base
   class UserCrawler
     attr_reader :retrieved_favs,
       :new_users, :new_tweets, :new_favs
+    attr_writer :fav_provider
 
-    def initialize(twitter_user, fav_source)
+    def initialize(twitter_user)
       @user_being_crawled = twitter_user
-      @fav_source = fav_source
+      @fav_provider = FavProvider.new(@user_being_crawled.twitter_uid)
       @retrieved_favs = []
       @new_users = []
       @new_tweets = []
@@ -56,7 +57,7 @@ class TwitterUser < ActiveRecord::Base
     end
 
     def get_favs
-      @retrieved_favs = @fav_source.get_favs
+      @retrieved_favs = @fav_provider.get_favs
     end
 
     def save_previously_unseen_objects
@@ -84,15 +85,14 @@ class TwitterUser < ActiveRecord::Base
     
     def save_previously_unseen_fav(tweet)
       new_fav = @user_being_crawled.favs.new(:tweet_id => tweet.id)
-      @new_favs << new_fav if new_fav.save
+      @new_favs << new_fav if new_fav.save!
     end
   end
 
   def crawl
     return false if twitter_uid.nil? or
       not ready_to_be_crawled
-    fav_source = FavSource.new(twitter_uid)
-    crawler = UserCrawler.new(self, fav_source)
+    crawler = UserCrawler.new(self)
     crawler.get_favs
     crawler.save_previously_unseen_objects
     prepare_for_next_crawl
