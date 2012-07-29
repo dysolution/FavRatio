@@ -54,8 +54,10 @@ describe TwitterUser do
     end
   end
 
-  it "should know about tweets it has faved" do
-    @user.tweets.should be_an(Array)
+  describe :tweets do
+    subject { @user.tweets }
+    before { @user = TwitterUser.new }
+    it { should be_an(Array) }
   end
 
 end
