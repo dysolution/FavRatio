@@ -28,7 +28,7 @@ describe TwitterUser do
         TwitterUser::FAVRATIO_TWITTER_USER_ID)
     end
 
-    describe "shouldn't proceed" do
+    context "should not proceed" do
       it "without a valid twitter_uid" do
         @user.twitter_uid = nil
         @user.crawl.should be_false
@@ -43,24 +43,52 @@ describe TwitterUser do
       end
     end
 
-    describe "should proceed" do
+    context "when allowed to run" do
       before { @user.crawling_enabled = true }
-      it "if favs are stale and crawling is enabled" do
-        @user.next_crawl_time = 2.hours.ago
-        @user.crawl.should be_an(Array)
+      it "should know when its favs are stale" do
+        @user.next_crawl_time = 23.minutes.ago
+        @user.favs_are_stale.should be_true
       end
-      it "and find at least 1 new tweet" do
-        Tweet.destroy_all
-        expect do
-          @user.crawl
-        end.should change(Tweet, :count).by_at_least(1)
-      end
-      it "and set the right next crawl time afterward" do
+      it "should ensure the crawler waits to run again" do
         id = @user.id
         @user.latest_crawl_time = 5.hours.ago
         @user.crawl.should be_an(Array)
         @user = TwitterUser.find(id)
         @user.next_crawl_time.utc.should be > (Time.now + (@user.crawl_interval - 1).minutes).utc
+      end
+
+      context "but there is no new data to be found" do
+        before { @user.crawl }
+        it "should not try to save any users" do
+          expect { @user.crawl }.should_not change(TwitterUser, :count)
+        end
+        it "should not try to save any tweets" do
+          expect { @user.crawl }.should_not change(Tweet, :count)
+        end
+        it "should not try to save any favs" do
+          expect { @user.crawl }.should_not change(Fav, :count)
+        end
+      end
+
+      context "and there is new data to be found" do
+        it "should record a new user" do
+          TwitterUser.destroy_all
+          expect do
+            @user.crawl
+          end.should change(TwitterUser, :count).by_at_least(1)
+        end
+        it "should record a new tweet" do
+          Tweet.destroy_all
+          expect do
+            @user.crawl
+          end.should change(Tweet, :count).by_at_least(1)
+        end
+        it "should record a new fav" do
+          Fav.destroy_all
+          expect do
+            @user.crawl
+          end.should change(Fav, :count).by_at_least(1)
+        end
       end
     end
   end
