@@ -65,14 +65,10 @@ class TwitterUser < ActiveRecord::Base
 
 
   def refresh_from_twitter
-  	info_from_twitter = Twitter.user(twitter_uid.to_i)
+  	fresh_info = Twitter.user(twitter_uid.to_i)
     attr = {
-      :followers_count   => info_from_twitter.followers_count,
-      :favorites_count   => info_from_twitter.favourites_count,
-      :friends_count     => info_from_twitter.friends_count,
-      :avatar_url        => info_from_twitter.profile_image_url,
-      :statuses_count    => info_from_twitter.statuses_count,
-      :twitter_username  => info_from_twitter.screen_name
+      :avatar_url        => fresh_info.profile_image_url,
+      :twitter_username  => fresh_info.screen_name
     }
     update_attributes(attr)
   end
@@ -97,7 +93,6 @@ end
 #  friends_count               :integer
 #  statuses_count              :integer
 #  created_at                  :datetime         not null
-#  ready_to_be_crawled         :boolean
 #  crawling_enabled            :boolean
 #  latest_crawl_time           :datetime
 #  next_crawl_time             :datetime

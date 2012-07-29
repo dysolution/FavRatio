@@ -44,7 +44,6 @@ end
 #  friends_count               :integer
 #  statuses_count              :integer
 #  created_at                  :datetime         not null
-#  ready_to_be_crawled         :boolean
 #  crawling_enabled            :boolean
 #  latest_crawl_time           :datetime
 #  next_crawl_time             :datetime

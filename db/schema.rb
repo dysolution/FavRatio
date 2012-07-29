@@ -41,7 +41,6 @@ ActiveRecord::Schema.define(:version => 20120729025057) do
     t.integer  "latest_crawl_fav_count"
     t.datetime "last_refreshed_from_twitter"
     t.datetime "created_at",                  :null => false
-    t.boolean  "ready_to_be_crawled"
     t.boolean  "crawling_enabled"
     t.datetime "latest_crawl_time"
     t.datetime "next_crawl_time"
