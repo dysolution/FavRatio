@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "Twitter User management" do
+describe "Twitter User manager" do
 
   before do
     tu1 = TwitterUser.create(crawling_enabled: true)
