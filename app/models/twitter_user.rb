@@ -5,6 +5,15 @@ class TwitterUser < ActiveRecord::Base
 
   scope :crawlable, where(crawling_enabled: true)
 
+  before_create :default_values
+  
+  def default_values
+    self.crawl_interval    ||= 120
+    self.latest_crawl_time ||= DateTime.now.utc
+    self.next_crawl_time   ||= DateTime.now.utc
+    self.crawling_enabled  ||= false
+  end
+
   def self.crawl_all
     self.crawlable.each do |user|
       user.crawl
