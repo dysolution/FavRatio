@@ -27,30 +27,41 @@ describe TwitterUser do
       @user = TwitterUser.create(twitter_uid:
         TwitterUser::FAVRATIO_TWITTER_USER_ID)
     end
-    it "shouldn't proceed without a valid twitter_uid" do
-      @user.twitter_uid = nil
-      @user.crawl.should be_false
+
+    describe "shouldn't proceed" do
+      it "without a valid twitter_uid" do
+        @user.twitter_uid = nil
+        @user.crawl.should be_false
+      end
+      it "if not enough time has passed" do
+        @user.next_crawl_time = 5.minutes.from_now
+        @user.crawl.should be_false
+      end
+      it "if crawling is disabled" do
+        @user.crawling_enabled = false
+        @user.crawl.should be_false
+      end
     end
-    it "shouldn't proceed if not enough time has passed" do
-      @user.next_crawl_time = 5.minutes.from_now
-      @user.crawl.should be_false
-    end
-    it "shouldn't proceed if crawling is disabled" do
-      @user.crawling_enabled = false
-      @user.crawl.should be_false
-    end
-    it "should proceed if favs are stale and crawling is enabled" do
-      @user.next_crawl_time = 2.hours.ago
-      @user.crawling_enabled = true
-      @user.crawl.should be_an(Array)
-    end
-    it "should set the right next crawl time afterward" do
-      id = @user.id
-      @user.crawling_enabled = true
-      @user.latest_crawl_time = 5.hours.ago
-      @user.crawl.should be_an(Array)
-      @user = TwitterUser.find(id)
-      @user.next_crawl_time.utc.should be > (Time.now + (@user.crawl_interval - 1).minutes).utc
+
+    describe "should proceed" do
+      before { @user.crawling_enabled = true }
+      it "if favs are stale and crawling is enabled" do
+        @user.next_crawl_time = 2.hours.ago
+        @user.crawl.should be_an(Array)
+      end
+      it "and find at least 1 new tweet" do
+        Tweet.destroy_all
+        expect do
+          @user.crawl
+        end.should change(Tweet, :count).by_at_least(1)
+      end
+      it "and set the right next crawl time afterward" do
+        id = @user.id
+        @user.latest_crawl_time = 5.hours.ago
+        @user.crawl.should be_an(Array)
+        @user = TwitterUser.find(id)
+        @user.next_crawl_time.utc.should be > (Time.now + (@user.crawl_interval - 1).minutes).utc
+      end
     end
   end
 
