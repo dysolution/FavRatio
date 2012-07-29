@@ -1,5 +1,5 @@
 class TwitterUser < ActiveRecord::Base
-  
+
   FAVRATIO_TWITTER_USER_ID = '228903682'
 
 	has_many :favs, foreign_key: 'faver_id'
@@ -33,30 +33,70 @@ class TwitterUser < ActiveRecord::Base
 		end
 	end
 
-	def get_favs
-		# get the latest 20 favs for this user
-    Twitter.favorites(twitter_uid.to_i)
+  class FavSource
+    def initialize(twitter_uid)
+      @twitter_uid_int = twitter_uid.to_i
+    end
+    def get_favs
+      Twitter.favorites(@twitter_uid_int)
+    end
+  end
+
+  class UserCrawler
+    attr_reader :retrieved_favs,
+      :new_users, :new_tweets, :new_favs
+
+    def initialize(twitter_user, fav_source)
+      @user_being_crawled = twitter_user
+      @fav_source = fav_source
+      @retrieved_favs = []
+      @new_users = []
+      @new_tweets = []
+      @new_favs = []
+    end
+
+    def get_favs
+      @retrieved_favs = @fav_source.get_favs
+    end
+
+    def save_previously_unseen_objects
+      @retrieved_favs.each do |tweet|
+        author = save_previously_unseen_author(tweet)
+        save_previously_unseen_tweet(tweet, author)
+        save_previously_unseen_fav(tweet)
+      end
+    end
+    
+    def save_previously_unseen_author(tweet)
+      new_author = TwitterUser.
+        find_or_initialize_by_twitter_uid(
+          tweet.user.id.to_s)
+      @new_users << new_author if new_author.save
+      new_author
+    end
+
+    def save_previously_unseen_tweet(tweet, new_author)
+      new_tweet = new_author.tweets.new(
+        twitter_uid: tweet.id, text: tweet.text,
+        timestamp: tweet.created_at)
+      @new_tweets << new_tweet if new_tweet.save
+    end
+    
+    def save_previously_unseen_fav(tweet)
+      new_fav = @user_being_crawled.favs.new(:tweet_id => tweet.id)
+      @new_favs << new_fav if new_fav.save
+    end
   end
 
   def crawl
     return false if twitter_uid.nil? or
       not ready_to_be_crawled
-    favored_tweets = get_favs
-    new_twitter_users_found = []
-    new_tweets_found = []
-    new_favs_found = []
-    favored_tweets.each do |tweet|
-      author = TwitterUser.find_or_initialize_by_twitter_uid(tweet.user.id.to_s)
-      new_twitter_users_found << author if author.save
-      new_tweet = author.tweets.new(
-        twitter_uid: tweet.id, text: tweet.text,
-        timestamp: tweet.created_at).save
-      new_tweets_found << new_tweet if new_tweet
-      new_fav = self.favs.new(:tweet_id => tweet.id).save
-      new_favs_found << new_fav if new_fav
-    end
+    fav_source = FavSource.new(twitter_uid)
+    crawler = UserCrawler.new(self, fav_source)
+    crawler.get_favs
+    crawler.save_previously_unseen_objects
     prepare_for_next_crawl
-    [new_twitter_users_found, new_tweets_found, new_favs_found]
+    [crawler.new_users, crawler.new_tweets, crawler.new_favs]
   end
     
   def prepare_for_next_crawl
