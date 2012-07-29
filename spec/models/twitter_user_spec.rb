@@ -20,7 +20,37 @@ describe TwitterUser do
   before { @user = TwitterUser.new }
   subject { @user }
 
-  it { should respond_to(:crawl) }
+  describe :crawl do
+    before(:each) do
+      @user = TwitterUser.create(twitter_uid:
+        TwitterUser::FAVRATIO_TWITTER_USER_ID)
+    end
+    it "shouldn't proceed without a valid twitter_uid" do
+      @user.twitter_uid = nil
+      @user.crawl.should be_false
+    end
+    it "shouldn't proceed if not enough time has passed" do
+      @user.next_crawl_time = 5.minutes.from_now
+      @user.crawl.should be_false
+    end
+    it "shouldn't proceed if crawling is disabled" do
+      @user.crawling_enabled = false
+      @user.crawl.should be_false
+    end
+    it "should proceed if favs are stale and crawling is enabled" do
+      @user.next_crawl_time = 2.hours.ago
+      @user.crawling_enabled = true
+      @user.crawl.should be_an(Array)
+    end
+    it "should set the right next crawl time afterward" do
+      id = @user.id
+      @user.crawling_enabled = true
+      @user.latest_crawl_time = 5.hours.ago
+      @user.crawl.should be_an(Array)
+      @user = TwitterUser.find(id)
+      @user.next_crawl_time.utc.should be > (Time.now + (@user.crawl_interval - 1).minutes).utc
+    end
+  end
 
   it "should know about tweets it has faved" do
     @user.tweets.should be_an(Array)

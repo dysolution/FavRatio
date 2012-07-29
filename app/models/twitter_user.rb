@@ -8,18 +8,18 @@ class TwitterUser < ActiveRecord::Base
   scope :crawlable, where(crawling_enabled: true)
 
   before_create :default_values
-  
+
   def default_values
+    now = DateTime.now
     self.crawl_interval    ||= 120
-    self.latest_crawl_time ||= DateTime.now.utc
-    self.next_crawl_time   ||= DateTime.now.utc
+    self.latest_crawl_time ||= now
+    self.next_crawl_time   ||= now
     self.crawling_enabled  ||= false
+    true # throws RecordNotSaved if above returns false
   end
 
   def self.crawl_all
-    self.crawlable.each do |user|
-      user.crawl
-      end
+    self.crawlable.map(&:crawl)
   end
 
 	def self.refresh_crawlable_users
@@ -60,9 +60,20 @@ class TwitterUser < ActiveRecord::Base
       new_fav = Fav.new(:faver_id => self.id, :tweet_id => t.id)
       new_favs_found << new_fav if new_fav.save
     end
+    set_latest_crawl_time
+    set_next_crawl_time
     new_favs_found
   end
 
+  def set_latest_crawl_time
+    self.latest_crawl_time = Time.now
+    save
+  end
+
+  def set_next_crawl_time
+    self.next_crawl_time = crawl_interval.minutes.from_now
+    save
+  end
 
   def refresh_from_twitter
   	fresh_info = Twitter.user(twitter_uid.to_i)
@@ -73,7 +84,13 @@ class TwitterUser < ActiveRecord::Base
     update_attributes(attr)
   end
 
+  def ready_to_be_crawled
+    !!twitter_uid and favs_are_stale and crawling_enabled
+  end
 
+  def favs_are_stale
+    self.next_crawl_time < Time.now
+  end
 
 end
 
