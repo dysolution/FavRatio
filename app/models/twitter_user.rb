@@ -41,23 +41,17 @@ class TwitterUser < ActiveRecord::Base
   def crawl
     return false if twitter_uid.nil? or
       not ready_to_be_crawled
-    favs = get_favs
+    favored_tweets = get_favs
     new_favs_found = []
-    favs.each do |favored_tweet|
+    favored_tweets.each do |tweet|
       # create the user if necessary
-      author = TwitterUser.find_or_create_by_twitter_uid(favored_tweet.user.id.to_s)
-
-      # create the tweet if necessary
-      tweet_attr = {
-        :twitter_uid => favored_tweet.id,
-        :text => favored_tweet.text,
-        :author_id => author.id,
-        :timestamp => favored_tweet.created_at
-      }
-      t = Tweet.create(tweet_attr)
-
+      author = TwitterUser.find_or_create_by_twitter_uid(
+        tweet.user.id.to_s)
+      author.tweets.create(
+        twitter_uid: tweet.id, text: tweet.text,
+        timestamp: tweet.created_at)
       # create the fav if necessary
-      new_fav = Fav.new(:faver_id => self.id, :tweet_id => t.id)
+      new_fav = Fav.new(:faver_id => self.id, :tweet_id => tweet.id)
       new_favs_found << new_fav if new_fav.save
     end
     set_latest_crawl_time
