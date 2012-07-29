@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120728195944) do
+ActiveRecord::Schema.define(:version => 20120729025057) do
 
   create_table "favs", :force => true do |t|
     t.integer  "tweet_id"
@@ -40,10 +40,6 @@ ActiveRecord::Schema.define(:version => 20120728195944) do
     t.integer  "crawl_interval"
     t.integer  "latest_crawl_fav_count"
     t.datetime "last_refreshed_from_twitter"
-    t.integer  "followers_count"
-    t.integer  "favorites_count"
-    t.integer  "friends_count"
-    t.integer  "statuses_count"
     t.datetime "created_at",                  :null => false
     t.boolean  "ready_to_be_crawled"
     t.boolean  "crawling_enabled"
