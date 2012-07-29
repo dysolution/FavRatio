@@ -14,11 +14,13 @@ describe "Twitter User management" do
   it "should be able to crawl all crawlable users" do
     TwitterUser.should respond_to(:crawl_all)
   end
+
+  it "should crawl all crawlable users" do
+    TwitterUser.crawl_all
+  end
 end
 
 describe TwitterUser do
-  before { @user = TwitterUser.new }
-  subject { @user }
 
   describe :crawl do
     before(:each) do
