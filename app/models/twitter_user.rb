@@ -94,7 +94,7 @@ class TwitterUser < ActiveRecord::Base
     end
   end
 
-  def inspect
+  def to_s
     "#{twitter_username}"
   end
 

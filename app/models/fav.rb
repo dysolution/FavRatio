@@ -7,7 +7,7 @@ class Fav < ActiveRecord::Base
   validates_uniqueness_of :faver_id, :scope => :tweet_id
 
 
-  def inspect
+  def to_s
     "#{tweet_id} faved by #{faver.twitter_username}"
   end
 
