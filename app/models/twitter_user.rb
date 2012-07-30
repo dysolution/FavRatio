@@ -138,8 +138,8 @@ class TwitterUser < ActiveRecord::Base
   def refresh_from_twitter
   	fresh_info = Twitter.user(twitter_uid.to_i)
     attr = {
-      :avatar_url        => fresh_info.profile_image_url,
-      :twitter_username  => fresh_info.screen_name
+      avatar_url:       fresh_info.profile_image_url,
+      twitter_username: fresh_info.screen_name
     }
     update_attributes(attr)
   end
