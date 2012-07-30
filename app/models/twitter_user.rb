@@ -35,7 +35,7 @@ class TwitterUser < ActiveRecord::Base
 		end
 	end
 
-  class FavProvider
+  class FavProvider # TODO: move out of TwitterUser model file
     def initialize(twitter_uid)
       @twitter_uid_int = twitter_uid.to_i
     end
@@ -44,7 +44,7 @@ class TwitterUser < ActiveRecord::Base
     end
   end
 
-  class UserCrawler
+  class UserCrawler # TODO: move out of TwitterUser model file
     attr_reader :retrieved_favs,
       :new_users, :new_tweets, :new_favs
     attr_writer :fav_provider
@@ -70,6 +70,7 @@ class TwitterUser < ActiveRecord::Base
 
     def save_previously_unseen_objects
       @retrieved_favs.each do |tweet|
+        # TODO: there has to be a cleaner way to do this
         author = save_previously_unseen_author(tweet)
         tweet = save_previously_unseen_tweet(tweet, author)
         save_previously_unseen_fav(tweet)
