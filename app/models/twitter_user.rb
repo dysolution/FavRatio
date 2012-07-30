@@ -94,6 +94,7 @@ class TwitterUser < ActiveRecord::Base
         twitter_uid: tweet.id, text: tweet.text,
         timestamp: tweet.created_at)
       @new_tweets << new_tweet if new_tweet.save
+      new_tweet
     end
     
     def save_previously_unseen_fav(tweet)
