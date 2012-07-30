@@ -109,7 +109,7 @@ class TwitterUser < ActiveRecord::Base
 
   def crawl
     return false if twitter_uid.nil? or
-      not ready_to_be_crawled
+      not ready_to_be_crawled?
     crawler = UserCrawler.new(self)
     crawler.get_favs_and_save_new_objects
     prepare_for_next_crawl
@@ -140,7 +140,7 @@ class TwitterUser < ActiveRecord::Base
     update_attributes(attr)
   end
 
-  def ready_to_be_crawled
+  def ready_to_be_crawled?
     !!twitter_uid and favs_are_stale and crawling_enabled
   end
 
