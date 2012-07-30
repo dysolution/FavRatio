@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe Fav do
+
   before(:each) do
     @author = TwitterUser.create!
     @tweet= Tweet.create!(text: 'foo', author_id: @author)
@@ -8,23 +9,29 @@ describe Fav do
     @fav = @faver.favs.create!(tweet_id: @tweet)
   end
 
+  it "requires a faver" do
+    Fav.new(tweet_id: @tweet).should_not be_valid
+  end
+  it "requires a tweet" do
+    Fav.new(faver_id: @faver).should_not be_valid
+  end
   it "properly distinguishes author and faver" do
     @fav.faver.should be_a(TwitterUser)
     @fav.tweet.author.id.should == @author.id
     @fav.faver.id.should == @faver.id
   end
-
   it "has a reference to the tweet that was faved" do
     @fav.tweet.should be_a(Tweet)
     @fav.tweet.id.should == @tweet.id
   end
   it "lets an author fav their own tweet" do
-      expect do
-        Fav.create!(tweet_id: @tweet, faver_id: @fav.tweet.author)
-      end.should change(Fav, :count).by(1)
+    expect do
+      Fav.create!(tweet_id: @tweet,
+                  faver_id: @fav.tweet.author)
+    end.should change(Fav, :count).by(1)
   end
 
-  context "when pointing at the same tweet as an existing Fav" do
+  context "for tweets with an existing Fav" do
     before(:each) do
       Fav.create!(tweet_id: 123, faver_id: 1)
     end
