@@ -25,6 +25,20 @@ describe TwitterUser do
     @user = TwitterUser.new
   end
 
+  context "when authoring a tweet" do
+    before { @user.save! }
+    it "can create the tweet externally" do
+      tweet1 = Tweet.create!(text: 'foo', author_id: @user)
+      tweet1.author.id.should == @user.id
+      @user.tweets.should include(tweet1)
+    end
+    it "can create the tweet directly in the user's collection" do 
+      tweet2 = @user.tweets.create!(text: 'bar')
+      tweet2.author.id.should == @user.id
+      @user.tweets.should include(tweet2)
+    end
+  end
+
   it "should provide an array of tweets it has authored" do
     @user.tweets.should be_an(Array)
   end

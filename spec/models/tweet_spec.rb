@@ -30,7 +30,16 @@ describe Tweet do
     user.tweets << @tweet
     @tweet.author.should == user
   end
+
+  it "should have the proper relationship to its favs" do
+    user = TwitterUser.create!
+    fav = Fav.create!(tweet_id: @tweet, faver_id: user)
+    @tweet.save
+    @tweet.favs.should include(fav)
+    user.favs.should include(fav)
+  end
 end
+
 
 # == Schema Information
 #
