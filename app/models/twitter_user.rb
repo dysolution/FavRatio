@@ -25,6 +25,7 @@ class TwitterUser < ActiveRecord::Base
   end
 
 	def self.refresh_crawlable_users
+    # TODO: clean this up
 		# only crawl people who are following @FavRatio
 		follower_ids = Twitter.follower_ids("FavRatio").collection[0,3]
 		follower_ids.each do |tu|
