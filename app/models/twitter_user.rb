@@ -165,10 +165,6 @@ end
 #  crawl_interval              :integer
 #  latest_crawl_fav_count      :integer
 #  last_refreshed_from_twitter :datetime
-#  followers_count             :integer
-#  favorites_count             :integer
-#  friends_count               :integer
-#  statuses_count              :integer
 #  created_at                  :datetime         not null
 #  crawling_enabled            :boolean
 #  latest_crawl_time           :datetime
