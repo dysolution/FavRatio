@@ -72,9 +72,15 @@ describe TwitterUser do
 
   describe "when crawled" do
     before(:each) do
-      @user1 = double("user1", id: "1234")
-      @user2 = double("user2", id: "5678")
-      @user3 = double("user3", id: "3935")
+      @user1 = double("user1", id: "1234",
+        screen_name: "Alvin",
+        profile_image_url: "http://example.com/alvin.jpg")
+      @user2 = double("user2", id: "5678", 
+        screen_name: "Simon",
+        profile_image_url: "http://example.com/simon.jpg")
+      @user3 = double("user3", id: "3935", 
+        screen_name: "Theodore",
+        profile_image_url: "http://example.com/ted.jpg")
       @tweet1 = double("tweet1", id: "283533523", 
                    text: "foobar", user: @user1,
                    created_at: Time.now.utc)
@@ -129,6 +135,15 @@ describe TwitterUser do
           expect do
             @crawler.get_favs_and_save_new_objects
           end.should change(obj_type, :count).by(3)
+        end
+      end
+      it "records details for all new authors" do
+        @crawler.get_favs
+        @crawler.retrieved_favs.each do |tweet|
+          author = @crawler.save_previously_unseen_author(tweet)
+          author.twitter_username.should_not be_blank
+          author.avatar_url.should_not be_blank
+          author.last_refreshed_from_twitter.should be_within(10).of(Time.now.utc)
         end
       end
     end

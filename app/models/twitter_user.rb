@@ -85,6 +85,9 @@ class TwitterUser < ActiveRecord::Base
       new_author = TwitterUser.
         find_or_initialize_by_twitter_uid(
           tweet.user.id.to_s)
+      new_author.twitter_username = tweet.user.screen_name
+      new_author.avatar_url = tweet.user.profile_image_url
+      new_author.last_refreshed_from_twitter = Time.now.utc
       @new_users << new_author if new_author.save
       new_author
     end
