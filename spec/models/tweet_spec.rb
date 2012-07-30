@@ -5,24 +5,23 @@ describe Tweet do
   before { @tweet = Tweet.new(author_id: 1, text: "foo") }
   subject { @tweet }
 
-  describe "blank text" do
-    before { @tweet.text = "" }
-    it { should_not be_valid }
-  end
-  
-  describe "text isn't present" do
-    before { @tweet.text = nil }
-    it { should_not be_valid }
-  end
-
-  describe "author isn't present" do
-    before { @tweet.author_id = nil }
-    it { should_not be_valid }
-  end
-
-  describe "text is too long" do
-    before { @tweet.text = "a" * 141 }
-    it { should_not be_valid }
+  context "validations include" do
+    describe "blank text" do
+      before { @tweet.text = "" }
+      it { should_not be_valid }
+    end
+    describe "text isn't present" do
+      before { @tweet.text = nil }
+      it { should_not be_valid }
+    end
+    describe "author isn't present" do
+      before { @tweet.author_id = nil }
+      it { should_not be_valid }
+    end
+    describe "text is too long" do
+      before { @tweet.text = "a" * 141 }
+      it { should_not be_valid }
+    end
   end
 
   it "should find its author correctly" do
