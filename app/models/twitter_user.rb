@@ -94,6 +94,10 @@ class TwitterUser < ActiveRecord::Base
     end
   end
 
+  def inspect
+    "#{twitter_username}"
+  end
+
   def crawl
     return false if twitter_uid.nil? or
       not ready_to_be_crawled

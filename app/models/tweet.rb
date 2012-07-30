@@ -5,6 +5,10 @@ class Tweet < ActiveRecord::Base
             length: { maximum: 140 }
   validates :author_id, presence: true
   validates_uniqueness_of :twitter_uid
+
+  def inspect
+    "#{text}"
+  end
 end
 
 # == Schema Information
