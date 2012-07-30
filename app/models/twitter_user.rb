@@ -5,6 +5,8 @@ class TwitterUser < ActiveRecord::Base
 	has_many :favs, foreign_key: 'faver_id'
 	has_many :tweets, foreign_key: 'author_id'
 
+  validates_uniqueness_of :twitter_uid
+
   scope :crawlable, where(crawling_enabled: true)
 
   before_create :default_values

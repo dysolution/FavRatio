@@ -25,6 +25,11 @@ describe TwitterUser do
     @user = TwitterUser.new
   end
 
+  it "should not allow duplicates" do
+    TwitterUser.create(twitter_uid: "1234")
+    TwitterUser.new(twitter_uid: "1234").should_not be_valid
+  end
+
   context "when authoring a tweet" do
     before { @user.save! }
     it "can create the tweet externally" do
