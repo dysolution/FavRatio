@@ -5,3 +5,5 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+TwitterUser.create(twitter_uid: TwitterUser::FAVRATIO_TWITTER_USER_ID, 
+                   crawling_enabled: true)
