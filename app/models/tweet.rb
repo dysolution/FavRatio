@@ -1,9 +1,9 @@
 class Tweet < ActiveRecord::Base
   has_many :favs
   belongs_to :author, class_name: "TwitterUser"
-  validates :text, presence: true,
-            length: { maximum: 140 }
-  validates :author_id, presence: true
+
+  validates_length_of :text, :maximum => 140
+  validates_presence_of :author_id, :text
   validates_uniqueness_of :twitter_uid
 
   def inspect
