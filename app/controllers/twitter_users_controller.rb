@@ -99,7 +99,7 @@ class TwitterUsersController < ApplicationController
   # GET /twitter_users/1/crawl
   def crawl
     @twitter_user = TwitterUser.find(params[:id])
-    @favs = @twitter_user.crawl
+    new_users, new_tweets, @favs = @twitter_user.crawl
     respond_to do |format|
       format.html # crawl.html.erb
       format.json { render json: @twitter_users }
