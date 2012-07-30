@@ -46,7 +46,6 @@ describe Fav do
       end.should change(Fav, :count).by(1)
     end
   end
-
 end
 
 # == Schema Information

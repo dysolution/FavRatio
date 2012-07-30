@@ -131,21 +131,8 @@ describe TwitterUser do
           end.should change(obj_type, :count).by(3)
         end
       end
-
-#      it "should record fake tweets" do
-#        expect do
-#          @crawler.save_previously_unseen_objects
-#        end.should change(Tweet, :count).by(3)
-#      end
-#
-#      it "should record fake favs" do
-#        expect do
-#          @crawler.save_previously_unseen_objects
-#        end.should change(Fav, :count).by(3)
-#      end
     end
   end
-
 end
 
 
