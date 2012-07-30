@@ -96,6 +96,11 @@ describe TwitterUser do
     it "should retrieve favs" do
       @fav_provider.get_favs.should have(3).entries
     end
+    it "should adjust the crawl interval appropriately" do
+      @user.crawl_interval = nil
+      @crawler.get_favs_and_save_new_objects
+      @user.crawl_interval.should_not be_nil
+    end
     it "should ensure the crawler waits to run again" do
       id = @user.id
       @user.latest_crawl_time = 5.hours.ago

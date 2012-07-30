@@ -61,6 +61,7 @@ class TwitterUser < ActiveRecord::Base
     def get_favs_and_save_new_objects
       get_favs
       save_previously_unseen_objects
+      adjust_crawl_interval
     end
 
     def get_favs
@@ -70,9 +71,14 @@ class TwitterUser < ActiveRecord::Base
     def save_previously_unseen_objects
       @retrieved_favs.each do |tweet|
         author = save_previously_unseen_author(tweet)
-        save_previously_unseen_tweet(tweet, author)
+        tweet = save_previously_unseen_tweet(tweet, author)
         save_previously_unseen_fav(tweet)
       end
+    end
+
+    def adjust_crawl_interval
+      @user_being_crawled.crawl_interval ||= 120
+      @user_being_crawled.save
     end
     
     def save_previously_unseen_author(tweet)
