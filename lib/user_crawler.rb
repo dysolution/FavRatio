@@ -6,9 +6,9 @@ class UserCrawler
     :new_users, :new_tweets, :new_favs
   attr_writer :fav_provider
 
-  def initialize(twitter_user)
+  def initialize(twitter_user, fav_provider=FavProvider.new)
     @user_being_crawled = twitter_user
-    @fav_provider = FavProvider.new(@user_being_crawled.twitter_uid)
+    @fav_provider = fav_provider
     @retrieved_favs = []
     @new_users = []
     @new_tweets = []
@@ -22,7 +22,7 @@ class UserCrawler
   end
 
   def get_favs
-    @retrieved_favs = @fav_provider.get_favs
+    @retrieved_favs = @fav_provider.get_favs(@user_being_crawled.twitter_uid)
   end
 
   def save_previously_unseen_objects
