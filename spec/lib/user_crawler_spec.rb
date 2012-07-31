@@ -1,36 +1,17 @@
 require 'spec_helper'
+require 'tweet_provider'
+require 'twitter_user_provider'
 
 describe UserCrawler do
   before(:each) do
-    # mock TwitterUsers to be saved as authors
-    1.upto 3 do |n|
-      instance_variable_set("@user#{n}",
-        double("user#{n}",
-               id: "#{n}",
-               screen_name: "#{n}", 
-               profile_image_url: "http://f.oo/#{n}.jpg"))
-    end
-    # mock Tweets to be saved
-    1.upto 3 do |n|
-      author = instance_variable_get("@user#{n}")
-      instance_variable_set("@tweet#{n}",
-        double("tweet#{n}",
-               id: "#{n}",
-               text: "#{n}",
-               user: author,
-               created_at: Time.now.utc))
-    end
+    @num_new_tweets = 2
     @user = TwitterUser.create
-    @fav_provider = double("fav_source")
-    @fav_provider.stub(:get_favs) do
-      [@tweet1, @tweet2, @tweet3]
-    end
-    @crawler = UserCrawler.new(@user)
-    @crawler.fav_provider = @fav_provider
+    @fav_provider = FavProvider.new.mock_instance(@num_new_tweets)
+    @crawler = UserCrawler.new(@user, @fav_provider)
   end
 
   it "should retrieve favs" do
-    @fav_provider.get_favs.should have(3).entries
+    @fav_provider.get_favs.should have(@num_new_tweets).entries
   end
   it "should adjust the crawl interval appropriately" do
     @user.crawl_interval = nil
@@ -64,7 +45,7 @@ describe UserCrawler do
       it "saves new #{obj_type.to_s.pluralize}" do
         expect do
           @crawler.get_favs_and_save_new_objects
-        end.should change(obj_type, :count).by(3)
+        end.should change(obj_type, :count).by(@num_new_tweets)
       end
     end
     it "records details for all new authors" do
