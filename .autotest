@@ -1,0 +1,13 @@
+Autotest.add_hook :initialize do |at|
+  %w{.git .svn .hg .DS_Store vendor tmp log doc}.each do |exception|
+    at.add_exception(exception)
+  end
+ 
+  at.remove_mapping(/^lib\/.*\.rb$/)
+  at.add_mapping(%r%^lib/(.*).rb%) do |filename, m|
+    ["test/lib/#{m[1]}_test.rb"]
+  end
+ 
+  at.add_mapping(%r%^test/lib/.*\.rb$%) {|filename, _| filename}
+ 
+end
