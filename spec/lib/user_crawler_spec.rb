@@ -44,7 +44,10 @@ describe UserCrawler do
     @user.latest_crawl_time = 5.hours.ago
     @user.prepare_for_next_crawl
     @user = TwitterUser.find(id)
-    @user.next_crawl_time.utc.should be > (Time.now + (@user.crawl_interval - 1).minutes).utc
+    next_crawl_time = (Time.now + 
+                       (@user.crawl_interval - 1).minutes
+                      ).utc
+    @user.next_crawl_time.utc.should be > next_crawl_time
   end
 
   context "when there is no new data" do
