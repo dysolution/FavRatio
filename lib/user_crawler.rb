@@ -1,8 +1,32 @@
+class StatKeeper
+  attr_reader :fav_count, :author_count, :tweet_count
+  
+  def initialize
+    @fav_count, @author_count, @tweet_count = 0, 0, 0
+  end
+
+  def record_new_fav
+    @fav_count += 1
+  end
+
+  def record_new_author
+    @author_count += 1
+  end
+
+  def record_new_tweet
+    @tweet_count += 1
+  end
+
+end
+
+
+
+
 class UserCrawler
 
   require 'fav_provider'
 
-  attr_reader :retrieved_favs,
+  attr_reader :retrieved_favs, :stat_keeper,
     :new_users, :new_tweets, :new_favs
   attr_writer :fav_provider
 
@@ -10,9 +34,7 @@ class UserCrawler
     @user_being_crawled = twitter_user
     @fav_provider = fav_provider
     @retrieved_favs = []
-    @new_users = []
-    @new_tweets = []
-    @new_favs = []
+    @stat_keeper = StatKeeper.new
   end
 
   def get_favs_and_save_new_objects
@@ -46,7 +68,7 @@ class UserCrawler
     new_author.twitter_username = tweet.user.screen_name
     new_author.avatar_url = tweet.user.profile_image_url
     new_author.last_refreshed_from_twitter = Time.now.utc
-    @new_users << new_author if new_author.save
+    @stat_keeper.record_new_author if new_author.save
     new_author
   end
 
@@ -54,12 +76,12 @@ class UserCrawler
     new_tweet = new_author.tweets.new(
       twitter_uid: tweet.id, text: tweet.text,
       timestamp: tweet.created_at)
-    @new_tweets << new_tweet if new_tweet.save
+    @stat_keeper.record_new_tweet if new_tweet.save
     new_tweet
   end
   
   def save_previously_unseen_fav(tweet)
     new_fav = @user_being_crawled.favs.new(:tweet_id => tweet.id)
-    @new_favs << new_fav if new_fav.save
+    @stat_keeper.record_new_fav if new_fav.save
   end
 end

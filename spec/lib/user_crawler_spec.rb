@@ -2,6 +2,27 @@ require 'spec_helper'
 require 'tweet_provider'
 require 'twitter_user_provider'
 
+describe StatKeeper do
+  it "should increase the fav count by one" do
+    keeper = StatKeeper.new
+    count = keeper.fav_count
+    keeper.record_new_fav 
+    keeper.fav_count.should == count + 1
+  end
+  it "should increase the author count by one" do
+    keeper = StatKeeper.new
+    count = keeper.author_count
+    keeper.record_new_author 
+    keeper.author_count.should == count + 1
+  end
+  it "should increase the tweet count by one" do
+    keeper = StatKeeper.new
+    count = keeper.tweet_count
+    keeper.record_new_tweet 
+    keeper.tweet_count.should == count + 1
+  end
+end
+
 describe UserCrawler do
   before(:each) do
     @num_new_tweets = 2
@@ -66,6 +87,12 @@ describe UserCrawler do
         tweet.text.should_not be_blank
         tweet.timestamp.should be_a(Time)
       end
+    end
+    it "knows how many new objects of each type were found" do
+      @crawler.get_favs_and_save_new_objects
+      @crawler.stat_keeper.fav_count.should == @num_new_tweets
+      @crawler.stat_keeper.tweet_count.should == @num_new_tweets
+      @crawler.stat_keeper.author_count.should == @num_new_tweets
     end
   end
 end
