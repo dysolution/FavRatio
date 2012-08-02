@@ -1,5 +1,6 @@
 require 'twitter_user_provider'
 require 'tweet_provider'
+require 'rspec/mocks'
 
 class FavProvider
   def initialize
