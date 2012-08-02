@@ -19,4 +19,10 @@ describe "tweets/show" do
   render
   rendered.should have_selector("#text", text: "Lorem ipsum")
   end
+
+  it "properly renders unusual characters" do
+    assign(:tweet, stub_model(Tweet, text: "M & Ms"))
+    render
+    rendered.should have_selector("#text", text: "M & Ms")
+  end
 end
