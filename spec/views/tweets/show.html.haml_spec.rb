@@ -25,4 +25,6 @@ describe "tweets/show" do
     render
     rendered.should have_selector("#text", text: "M & Ms")
   end
+
+  # TODO: it "has a 'Share to Facebook' button"
 end
