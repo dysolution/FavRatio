@@ -50,6 +50,20 @@ describe TwitterUsersController do
     end
   end
 
+  describe "GET crawl" do
+    it "assigns the requested twitter_user as @twitter_user" do
+      twitter_user = TwitterUser.create! valid_attributes
+      get :show, {:id => twitter_user.to_param}, valid_session
+      assigns(:twitter_user).should eq(twitter_user)
+    end
+    it "crawls only if user is crawlable" do
+      twitter_user = TwitterUser.create! valid_attributes
+      twitter_user.crawling_enabled = false
+      get :crawl, {:id => twitter_user.to_param}, valid_session
+      response.should redirect_to(TwitterUser)
+    end
+  end
+
   describe "GET new" do
     it "assigns a new twitter_user as @twitter_user" do
       get :new, {}, valid_session
