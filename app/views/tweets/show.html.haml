@@ -1,5 +1,9 @@
 %p#notice= notice
 
+%div#tweet
+  %p#text
+    = @tweet.text
+
 
 = link_to 'Edit', edit_tweet_path(@tweet)
 \|
