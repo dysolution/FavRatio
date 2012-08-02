@@ -87,7 +87,7 @@ class TwitterUsersController < ApplicationController
     @twitter_user = TwitterUser.find(params[:id])    
     respond_to do |format|
       if @twitter_user.refresh_from_twitter
-        format.html { redirect_to @twitter_user, notice: 'Twitter user was successfully updated with the latest info from Twitter.' }
+        format.html { redirect_to @twitter_user, notice: "Twitter user @#{@twitter_user.twitter_username} was successfully updated with the latest info from Twitter." }
         format.json { head :ok }
       else
         format.html { redirect_to @twitter_user, error: 'Unable to update attributes.' }
