@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120729025057) do
+ActiveRecord::Schema.define(:version => 20120802024040) do
 
   create_table "favs", :force => true do |t|
     t.integer  "tweet_id"
@@ -32,6 +32,8 @@ ActiveRecord::Schema.define(:version => 20120729025057) do
     t.datetime "created_at",        :null => false
     t.datetime "updated_at",        :null => false
   end
+
+  add_index "tweets", ["twitter_uid"], :name => "index_tweets_on_twitter_uid", :unique => true
 
   create_table "twitter_users", :force => true do |t|
     t.string   "twitter_uid"
