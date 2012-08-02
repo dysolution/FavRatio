@@ -61,7 +61,7 @@ class TweetsController < ApplicationController
     respond_to do |format|
       if @tweet.update_attributes(params[:tweet])
         format.html { redirect_to @tweet, notice: 'Tweet was successfully updated.' }
-        format.json { head :ok }
+        format.json { head :no_content }
       else
         format.html { render action: "edit" }
         format.json { render json: @tweet.errors, status: :unprocessable_entity }
@@ -77,7 +77,7 @@ class TweetsController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to tweets_url }
-      format.json { head :ok }
+      format.json { head :no_content }
     end
   end
 end
