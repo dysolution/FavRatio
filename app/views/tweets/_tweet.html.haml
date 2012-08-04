@@ -1,3 +1,4 @@
 .tweet{id: "#{@tweet.twitter_uid}"}
+  %img.avatar{ src: @tweet.author.avatar_url }
   %p#text
     = @tweet.text

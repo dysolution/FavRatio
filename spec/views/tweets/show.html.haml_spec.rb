@@ -2,28 +2,38 @@ require 'spec_helper'
 
 describe "tweets/show" do
   before(:each) do
-    @tweet = assign(:tweet, stub_model(Tweet))
+    author = stub_model(TwitterUser, 
+      avatar_url: "http://example.com/foo.jpg")
+    @tweet = stub_model(Tweet, 
+      author: author, 
+      text: "Lorem ipsum dolor sit amet, consectetur 
+      adipiscing elit. Suspendisse vestibulum sem mattis
+      sapien blandit tempus. Sed velit ligula volutpat.")
   end
 
   it "renders attributes in <p>" do
+    assign(:tweet, @tweet)
     render
-    # Run the generator again with the --webrat flag if you want to use webrat matchers
   end
-end
 
-describe "tweets/show" do
   it "displays the tweet content" do
-  assign(:tweet, stub_model(Tweet,
-    :text => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse vestibulum sem mattis sapien blandit tempus. Sed velit ligula volutpat."
-  ))
-  render
-  rendered.should have_selector("#text", text: "Lorem ipsum")
+    assign(:tweet, @tweet)
+    render
+    rendered.should have_selector("#text", 
+                                  text: "Lorem ipsum")
   end
 
   it "properly renders unusual characters" do
-    assign(:tweet, stub_model(Tweet, text: "M & Ms"))
+    @tweet.text = "M & Ms"
+    assign(:tweet, @tweet)
     render
     rendered.should have_selector("#text", text: "M & Ms")
+  end
+
+  it "displays the author's avatar" do
+    render
+    rendered.should have_selector(".avatar", 
+      src: "http://example.com/foo.jpg")
   end
 
   # TODO: it "has a 'Share to Facebook' button"
