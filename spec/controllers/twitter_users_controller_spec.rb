@@ -60,7 +60,7 @@ describe TwitterUsersController do
       twitter_user = TwitterUser.create! valid_attributes
       twitter_user.crawling_enabled = false
       get :crawl, {:id => twitter_user.to_param}, valid_session
-      response.should redirect_to(TwitterUser)
+      response.should redirect_to(twitter_user)
     end
   end
 

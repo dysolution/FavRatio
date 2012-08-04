@@ -106,8 +106,10 @@ class TwitterUsersController < ApplicationController
         format.json { render json: @twitter_users }
       end
     else
-      format.html { redirect_to @twitter_user, error: "No new data found during crawl." }
-      format.json { render json: @twitter_user.errors, status: :no_new_data_found }
+      respond_to do |format|
+        format.html { redirect_to @twitter_user, error: "No new data found during crawl." }
+        format.json { render json: @twitter_user.errors, status: :no_new_data_found }
+      end
     end
   end
 end
