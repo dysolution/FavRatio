@@ -3,6 +3,7 @@ require 'spec_helper'
 describe "tweets/show" do
   before(:each) do
     author = stub_model(TwitterUser, 
+      twitter_username: "foo",
       avatar_url: "http://example.com/foo.jpg")
     @tweet = stub_model(Tweet, 
       author: author, 
@@ -32,8 +33,7 @@ describe "tweets/show" do
 
   it "displays the author's avatar" do
     render
-    rendered.should have_selector(".avatar", 
-      src: "http://example.com/foo.jpg")
+    rendered.should have_selector(".avatar")
   end
 
   # TODO: it "has a 'Share to Facebook' button"

@@ -5,9 +5,13 @@
     %th
     %th
     %th
+    %th
+    %th
 
   - @tweets.each do |tweet|
     %tr
+      %td= h tweet.text
+      %td= tweet.author.twitter_username
       %td= link_to 'Show', tweet
       %td= link_to 'Edit', edit_tweet_path(tweet)
       %td= link_to 'Destroy', tweet, :confirm => 'Are you sure?', :method => :delete

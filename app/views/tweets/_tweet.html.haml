@@ -1,4 +1,7 @@
 .tweet{id: "#{@tweet.twitter_uid}"}
-  %img.avatar{ src: @tweet.author.avatar_url }
+  = image_tag(@tweet.author.avatar_url,
+              class: "avatar",
+              alt: @tweet.author.twitter_username,
+              title: @tweet.author.twitter_username)
   %p#text
-    = @tweet.text
+    = h @tweet.text
