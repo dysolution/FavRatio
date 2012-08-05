@@ -32,6 +32,7 @@ group :test, :development do
   gem "rspec-rails"
   gem "sqlite3"
   gem "autotest-rails"
+  gem "webrat"
 end
 
 group :test do
