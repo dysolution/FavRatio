@@ -2,12 +2,17 @@
 
 %table
   %tr
+    %th avatar
+    %th twitter_username
     %th
     %th
     %th
 
   - @twitter_users.each do |twitter_user|
     %tr
+      %td= image_tag(twitter_user.avatar_url, class: "avatar")
+      %td.twitter-username= twitter_user.twitter_username
+      %td= link_to 'Crawl', crawl_twitter_user_path(twitter_user)
       %td= link_to 'Show', twitter_user
       %td= link_to 'Edit', edit_twitter_user_path(twitter_user)
       %td= link_to 'Destroy', twitter_user, :confirm => 'Are you sure?', :method => :delete
