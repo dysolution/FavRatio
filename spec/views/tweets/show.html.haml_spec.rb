@@ -20,15 +20,14 @@ describe "tweets/show" do
   it "displays the tweet content" do
     assign(:tweet, @tweet)
     render
-    rendered.should have_selector("#text", 
-                                  text: "Lorem ipsum")
+    rendered.should have_selector("p", content: "Lorem")
   end
 
   it "properly renders unusual characters" do
     @tweet.text = "M & Ms"
     assign(:tweet, @tweet)
     render
-    rendered.should have_selector("#text", text: "M & Ms")
+    rendered.should have_selector("p", content: "M & Ms")
   end
 
   it "displays the author's avatar" do
