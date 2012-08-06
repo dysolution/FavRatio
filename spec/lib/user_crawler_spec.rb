@@ -14,16 +14,6 @@ describe UserCrawler do
     @crawler.crawl
     @user.crawl_interval.should_not be_nil
   end
-  it "should ensure the crawler waits to run again" do
-    id = @user.id
-    @user.latest_crawl_time = 5.hours.ago
-    @user.prepare_for_next_crawl
-    @user = TwitterUser.find(id)
-    next_crawl_time = (Time.now + 
-                       (@user.crawl_interval - 1).minutes
-                      ).utc
-    @user.next_crawl_time.utc.should be > next_crawl_time
-  end
 
   context "when there is no new data" do
     [TwitterUser, Tweet, Fav].each do |obj_type|

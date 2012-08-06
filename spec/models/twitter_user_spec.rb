@@ -32,11 +32,13 @@ describe TwitterUser do
 
   context "when authoring a tweet" do
     before { @user.save! }
+
     it "can create the tweet externally" do
       tweet1 = Tweet.create!(text: 'foo', author_id: @user)
       tweet1.author.id.should == @user.id
       @user.tweets.should include(tweet1)
     end
+
     it "can create the tweet directly in the user's collection" do 
       tweet2 = @user.tweets.create!(text: 'bar')
       tweet2.author.id.should == @user.id
@@ -47,23 +49,37 @@ describe TwitterUser do
   it "should provide an array of tweets it has authored" do
     @user.tweets.should be_an(Array)
   end
+
   it "should know when its favs are stale" do
     @user.next_crawl_time = 23.minutes.ago
     @user.favs_are_stale.should be_true
   end
 
+  it "should make the crawler wait between crawls" do
+    user = @user.save
+    @user.prepare_for_next_crawl
+    @user = TwitterUser.find(user)
+    next_crawl_time = (Time.now + 
+                       (@user.crawl_interval - 1).minutes
+                      ).utc
+    @user.next_crawl_time.utc.should be > next_crawl_time
+  end
+  
   describe "should not crawl" do
     before(:each) do
       @user = TwitterUser.create
     end
+
     example "if twitter_uid is missing" do
       @user.twitter_uid = nil
       @user.crawl.should be_false
     end
+
     example "if not enough time has passed" do
       @user.next_crawl_time = 5.minutes.from_now
       @user.crawl.should be_false
     end
+
     example "if crawling is disabled" do
       @user.crawling_enabled = false
       @user.crawl.should be_false
