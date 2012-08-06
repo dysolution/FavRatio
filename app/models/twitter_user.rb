@@ -5,8 +5,8 @@ class TwitterUser < ActiveRecord::Base
 
   FAVRATIO_TWITTER_USER_ID = '228903682'
 
-	has_many :favs, foreign_key: 'faver_id'
-	has_many :tweets, foreign_key: 'author_id'
+  has_many :favs, foreign_key: 'faver_id'
+  has_many :tweets, foreign_key: 'author_id'
 
   validates_uniqueness_of :twitter_uid
 
