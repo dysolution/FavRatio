@@ -1,6 +1,5 @@
 require 'spec_helper'
 require 'tweet_provider'
-require 'twitter_user_provider'
 require 'mock_twitter_api'
 
 describe UserCrawler do
