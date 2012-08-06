@@ -18,9 +18,9 @@ class MockTwitterApi < TwitterApi
     twitter_user
   end
 
-  def get_favs(twitter_uid, num_favs=20)
+  def get_favs(twitter_uid, count=20)
     tweets = []
-    1.upto num_favs do |n|
+    1.upto count do |n|
       author = TwitterUserProvider.new.mock_instance(n)
       tweets << TweetProvider.new(author).mock_instance(n)
     end

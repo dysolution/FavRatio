@@ -8,8 +8,8 @@ class TwitterApi
     Twitter.user(twitter_uid.to_i)
   end
 
-  def get_favs(twitter_uid, num_favs=20)
-    Twitter.favorites(twitter_uid.to_i)
+  def get_favs(twitter_uid, count=20)
+    Twitter.favorites(twitter_uid.to_i, options: { count: count })
   end
 end
 
