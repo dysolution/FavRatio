@@ -15,8 +15,10 @@ class MockTwitterApi < TwitterApi
   def get_user_info(twitter_uid)
     twitter_user = double("twitter_user_#{twitter_uid}")
     twitter_user.stub(:id).and_return(twitter_uid)
-    twitter_user.stub(:screen_name).and_return("current_username_#{twitter_uid}")
-    twitter_user.stub(:profile_image_url).and_return("http://example.com/current_avatar_#{twitter_uid}.jpg")
+    twitter_user.stub(:screen_name).
+      and_return("current_username_#{twitter_uid}")
+    twitter_user.stub(:profile_image_url).
+      and_return("http://example.com/current_avatar_#{twitter_uid}.jpg")
     twitter_user
   end
 
