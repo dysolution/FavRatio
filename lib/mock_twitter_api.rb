@@ -28,6 +28,10 @@ class MockTwitterApi < TwitterApi
     tweets
   end
 
+  def get_crawlable_users
+    %w(12345 678910 11 12)
+  end
+
   private
 
   def fake_tweet(uid)

@@ -35,4 +35,10 @@ describe MockTwitterApi do
     tweets = @api.get_favs("1234", TWEET_COUNT)
     tweets.should have(TWEET_COUNT).entries
   end
+
+  it "should provide a list of crawlable users" do
+    ids = @api.get_crawlable_users
+    ids.should be_an(Array)
+    ids.each { |id| id.should be_a(String) }
+  end
 end
