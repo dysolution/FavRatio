@@ -27,17 +27,10 @@ class TwitterUser < ActiveRecord::Base
     self.crawlable.map(&:crawl)
   end
 
-	def self.refresh_crawlable_users
-    # TODO: clean this up
-		# only crawl people who are following @FavRatio
-		follower_ids = Twitter.follower_ids("FavRatio").collection[0,3]
-		follower_ids.each do |tu|
-			unless self.find_by_twitter_uid tu
-				new_twitter_user = TwitterUser.create(:twitter_uid => tu)
-				new_twitter_user.refresh_from_twitter
-			end
-		end
-	end
+  def self.crawl_all!
+    # Crawl them all, no matter what.
+    self.crawlable.map(&:crawl!)
+  end
 
 
   def to_s
@@ -47,10 +40,12 @@ class TwitterUser < ActiveRecord::Base
   def crawl
     return false if twitter_uid.nil? or
       not ready_to_be_crawled?
-    crawler = UserCrawler.new(self)
-    crawler.crawl
-    prepare_for_next_crawl
-    crawler.stats
+    run_crawl
+  end
+
+  def crawl!
+    # Crawl even if an interval hasn't yet passed.
+    run_crawl
   end
 
   def favs_are_stale
@@ -63,6 +58,13 @@ class TwitterUser < ActiveRecord::Base
   end
 
   private
+
+  def run_crawl
+    crawler = UserCrawler.new(self)
+    crawler.crawl
+    prepare_for_next_crawl
+    crawler.stats
+  end
 
   def set_latest_crawl_time
     self.latest_crawl_time = Time.now
