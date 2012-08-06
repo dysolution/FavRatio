@@ -1,4 +1,5 @@
 require 'crawled_author'
+require 'crawled_tweet'
 
 class FavedTweetParser
 
@@ -18,20 +19,21 @@ class FavedTweetParser
     author = CrawledAuthor.new(@faved_tweet)
     unless author.exists?
       @author_is_new = true
-      author.create_user
+      author.create_favratio_user
     end
     author.update_last_refreshed
     author.favratio_user
   end
   
   def attribute_tweet_to_author
-    unless @tweet = Tweet.find_by_twitter_uid(@faved_tweet.id)
+    crawled_tweet = CrawledTweet.new(@faved_tweet)
+    unless crawled_tweet.exists?
       @tweet_is_new = true
-      @tweet = @author.tweets.create(
-        twitter_uid: @faved_tweet.id,
-        text: @faved_tweet.text,
-        timestamp: @faved_tweet.created_at)
+      crawled_tweet.create_favratio_tweet
     end
+    @tweet = crawled_tweet.favratio_tweet
+    @author.tweets << @tweet
+    @tweet
   end
   
   def find_or_create_fav
