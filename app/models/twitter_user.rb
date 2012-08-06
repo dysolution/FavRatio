@@ -52,11 +52,17 @@ class TwitterUser < ActiveRecord::Base
     prepare_for_next_crawl
     [crawler.new_users, crawler.new_tweets, crawler.new_favs]
   end
-    
+
+  def favs_are_stale
+    self.next_crawl_time < Time.now
+  end
+
   def prepare_for_next_crawl
     set_latest_crawl_time
     set_next_crawl_time
   end
+
+  private
 
   def set_latest_crawl_time
     self.latest_crawl_time = Time.now
@@ -77,9 +83,6 @@ class TwitterUser < ActiveRecord::Base
     !!twitter_uid and favs_are_stale and crawling_enabled
   end
 
-  def favs_are_stale
-    self.next_crawl_time < Time.now
-  end
 
 end
 
