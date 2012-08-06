@@ -6,11 +6,9 @@ class Fav < ActiveRecord::Base
   validates_presence_of :tweet_id, :faver_id
   validates_uniqueness_of :faver_id, :scope => :tweet_id
 
-
   def to_s
     "#{tweet_id} faved by #{faver.twitter_username}"
   end
-
 end
 
 # == Schema Information
