@@ -2,36 +2,6 @@ require 'spec_helper'
 require 'mock_twitter_api'
 require 'faved_tweet_parser'
 
-describe FavedTweetParser do
-  before do
-    @num_new_tweets = 4
-    @user = TwitterUser.create(twitter_username: "target_user")
-    @crawler = UserCrawler.new(@user, api=MockTwitterApi.new, @num_new_tweets)
-  end
-
-  it "records details for all new authors" do
-    @crawler.get_favs
-    @crawler.retrieved_favs.each do |tweet|
-      author = FavedTweetParser.new(tweet, @user).find_or_create_author
-      author.twitter_username.should_not be_blank
-      author.avatar_url.should_not be_blank
-      author.last_refreshed_from_twitter.should be_within(10).of(Time.now.utc)
-    end
-  end
-
-  it "records details for all new tweets" do
-    @crawler.get_favs
-    @crawler.retrieved_favs.each do |tweet|
-      parser = FavedTweetParser.new(tweet, @user)
-      parser.attribute_tweet_to_author
-      tweet = parser.tweet
-      tweet.twitter_uid.should_not be_blank
-      tweet.text.should_not be_blank
-      tweet.timestamp.should be_a(Time)
-    end
-  end
-end
-
 describe UserCrawler do
   before(:each) do
     @num_new_tweets = 4
