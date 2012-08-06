@@ -27,13 +27,9 @@ describe UserCrawler do
   before(:each) do
     @num_new_tweets = 2
     @user = TwitterUser.create
-    @fav_provider = FavProvider.new.mock_instance(@num_new_tweets)
-    @crawler = UserCrawler.new(@user, @fav_provider)
+    @crawler = UserCrawler.new(@user, api=MockTwitterApi.new, @num_new_tweets)
   end
 
-  it "should retrieve favs" do
-    @fav_provider.get_favs.should have(@num_new_tweets).entries
-  end
   it "should adjust the crawl interval appropriately" do
     @user.crawl_interval = nil
     @crawler.get_favs_and_save_new_objects

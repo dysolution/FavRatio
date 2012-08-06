@@ -16,25 +16,23 @@ class StatKeeper
   def record_new_tweet
     @tweet_count += 1
   end
-
 end
-
-
 
 
 class UserCrawler
 
-  require 'fav_provider'
-
   attr_reader :retrieved_favs, :stat_keeper,
     :new_users, :new_tweets, :new_favs
-  attr_writer :fav_provider
 
-  def initialize(twitter_user, fav_provider=FavProvider.new)
+  # The crawler can be tested in isolation from the
+  # "live" Twitter API by specifying the
+  # MockTwitterApi instead of the TwitterApi.
+  def initialize(twitter_user, api=TwitterApi.new, num_favs=20)
     @user_being_crawled = twitter_user
-    @fav_provider = fav_provider
+    @api = api
     @retrieved_favs = []
     @stat_keeper = StatKeeper.new
+    @num_favs = num_favs
   end
 
   def get_favs_and_save_new_objects
@@ -44,7 +42,7 @@ class UserCrawler
   end
 
   def get_favs
-    @retrieved_favs = @fav_provider.get_favs(@user_being_crawled.twitter_uid)
+    @retrieved_favs = @api.get_favs(@user_being_crawled.twitter_uid, num_favs=@num_favs)
   end
 
   def save_previously_unseen_objects

@@ -1,6 +1,7 @@
 class TwitterUser < ActiveRecord::Base
 
   require 'user_crawler'
+  require 'user_refresher'
 
   FAVRATIO_TWITTER_USER_ID = '228903682'
 
@@ -68,12 +69,8 @@ class TwitterUser < ActiveRecord::Base
   end
 
   def refresh_from_twitter
-  	fresh_info = Twitter.user(twitter_uid.to_i)
-    attr = {
-      avatar_url:       fresh_info.profile_image_url,
-      twitter_username: fresh_info.screen_name
-    }
-    update_attributes(attr)
+    refresher = UserRefresher.new(self)
+    refresher.refresh
   end
 
   def ready_to_be_crawled?
