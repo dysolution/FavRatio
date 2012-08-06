@@ -3,8 +3,8 @@ require 'mock_twitter_api'
 
 describe UserCrawler do
   before(:each) do
-    @num_new_tweets = 2
-    @user = TwitterUser.create
+    @num_new_tweets = 4
+    @user = TwitterUser.create(twitter_username: "target_user")
     @crawler = UserCrawler.new(@user, api=MockTwitterApi.new, @num_new_tweets)
   end
 
@@ -25,12 +25,9 @@ describe UserCrawler do
   end
 
   context "when there is no new data" do
-    before(:each) do
-      @crawler.get_favs_and_save_new_objects
-    end
-    
     [TwitterUser, Tweet, Fav].each do |obj_type|
       it "doesn't save new #{obj_type.to_s.pluralize}" do
+        @crawler.get_favs_and_save_new_objects
         expect do
           @crawler.get_favs_and_save_new_objects
         end.should_not change(obj_type, :count)
@@ -39,6 +36,7 @@ describe UserCrawler do
   end
 
   context "when there is previously unseen data" do
+
     [TwitterUser, Tweet, Fav].each do |obj_type|
       it "saves new #{obj_type.to_s.pluralize}" do
         expect do
@@ -49,7 +47,7 @@ describe UserCrawler do
     it "records details for all new authors" do
       @crawler.get_favs
       @crawler.retrieved_favs.each do |tweet|
-        author = @crawler.save_previously_unseen_author(tweet)
+        author = @crawler.find_or_create_author(tweet)
         author.twitter_username.should_not be_blank
         author.avatar_url.should_not be_blank
         author.last_refreshed_from_twitter.should be_within(10).of(Time.now.utc)
