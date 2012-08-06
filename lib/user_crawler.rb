@@ -29,6 +29,24 @@ class UserCrawler
     @retrieved_favs = @api.get_favs(twitter_uid, @num_favs)
   end
 
+  def stats
+    { new_favs: @stat_keeper.fav_count,
+      new_tweets: @stat_keeper.tweet_count,
+      new_authors: @stat_keeper.author_count }
+  end
+
+  def new_favs
+    @stat_keeper.fav_count
+  end
+
+  def new_tweets
+    @stat_keeper.tweet_count
+  end
+
+  def new_authors
+    @stat_keeper.author_count
+  end
+
   private
 
   def parse_favs

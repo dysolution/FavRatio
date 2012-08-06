@@ -99,17 +99,32 @@ class TwitterUsersController < ApplicationController
   # GET /twitter_users/1/crawl
   def crawl
     @twitter_user = TwitterUser.find(params[:id])
-    new_users, new_tweets, @favs = @twitter_user.crawl
-    if new_users || new_tweets || @favs 
+    @stats = @twitter_user.crawl
+    if @stats == false
       respond_to do |format|
-        format.html # crawl.html.erb
-        format.json { render json: @twitter_users }
+        format.html { redirect_to @twitter_user, error: "Did not crawl user." }
+        format.json { render json: @twitter_user.errors, status: :did_not_crawl }
       end
     else
-      respond_to do |format|
-        format.html { redirect_to @twitter_user, error: "No new data found during crawl." }
-        format.json { render json: @twitter_user.errors, status: :no_new_data_found }
+      if new_data_found
+        respond_to do |format|
+          format.html # crawl.html.erb
+          format.json { render json: @twitter_users }
+        end
+      else
+        respond_to do |format|
+          format.html { redirect_to @twitter_user, error: "No new data found during crawl." }
+          format.json { render json: @twitter_user.errors, status: :no_new_data_found }
+        end
       end
     end
+  end
+
+  private
+
+  def new_data_found
+    @stats[:new_users] > 0 ||
+    @stats[:new_tweets] > 0 ||
+    @stats[:new_favs] > 0
   end
 end

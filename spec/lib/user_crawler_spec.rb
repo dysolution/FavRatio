@@ -74,11 +74,12 @@ describe UserCrawler do
       end
     end
 
-    it "knows how many new objects of each type were found" do
+    it "should report how many new objects of each type were saved" do
       @crawler.crawl
-      @crawler.stat_keeper.fav_count.should == @num_new_tweets
-      @crawler.stat_keeper.tweet_count.should == @num_new_tweets
-      @crawler.stat_keeper.author_count.should == @num_new_tweets
+      stats = @crawler.stats
+      stats[:new_favs].should == @num_new_tweets
+      stats[:new_tweets].should == @num_new_tweets
+      stats[:new_authors].should == @num_new_tweets
     end
   end
 end

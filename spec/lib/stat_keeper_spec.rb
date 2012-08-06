@@ -1,20 +1,25 @@
+require 'stat_keeper'
+
 describe StatKeeper do
-  it "should increase the fav count by one" do
-    keeper = StatKeeper.new
-    count = keeper.fav_count
-    keeper.record_new_fav 
-    keeper.fav_count.should == count + 1
+  before do
+    @keeper = StatKeeper.new
   end
-  it "should increase the author count by one" do
-    keeper = StatKeeper.new
-    count = keeper.author_count
-    keeper.record_new_author 
-    keeper.author_count.should == count + 1
+
+  it "should record a new fav" do
+    @keeper.fav_count.should == 0
+    @keeper.record_new_fav
+    @keeper.fav_count.should == 1
   end
-  it "should increase the tweet count by one" do
-    keeper = StatKeeper.new
-    count = keeper.tweet_count
-    keeper.record_new_tweet 
-    keeper.tweet_count.should == count + 1
+
+  it "should record a new tweet" do
+    @keeper.tweet_count.should == 0
+    @keeper.record_new_tweet
+    @keeper.tweet_count.should == 1
+  end
+
+  it "should record a new author" do
+    @keeper.author_count.should == 0
+    @keeper.record_new_author
+    @keeper.author_count.should == 1
   end
 end

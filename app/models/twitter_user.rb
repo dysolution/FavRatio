@@ -48,9 +48,9 @@ class TwitterUser < ActiveRecord::Base
     return false if twitter_uid.nil? or
       not ready_to_be_crawled?
     crawler = UserCrawler.new(self)
-    crawler.get_favs_and_save_new_objects
+    crawler.crawl
     prepare_for_next_crawl
-    [crawler.new_users, crawler.new_tweets, crawler.new_favs]
+    crawler.stats
   end
 
   def favs_are_stale
