@@ -1,11 +1,13 @@
 require 'twitter_api'
 require 'rspec/mocks'
-require 'tweet_provider'
+require 'stub_helper'
 
 class MockTwitterApi < TwitterApi
   # For testing purposes, this "API" returns mock objects
   # similar to the real Twitter API.
   #
+  include StubHelper
+
   def initialize
     RSpec::Mocks::setup(self)
   end
@@ -20,10 +22,18 @@ class MockTwitterApi < TwitterApi
 
   def get_favs(twitter_uid, count=20)
     tweets = []
-    1.upto count do |n|
-      author = get_user_info(n)
-      tweets << TweetProvider.new(author).mock_instance(n)
-    end
+    1.upto(count) { |id| tweets << fake_tweet(id) }
     tweets
+  end
+
+  private
+
+  def fake_tweet(uid)
+    author = get_user_info(uid)
+    tweet = mock("tweet_#{uid}")
+    create_string_stubs(uid, tweet, %w(id text))
+    tweet.stub(:user).and_return(author)
+    tweet.stub(:created_at).and_return(Time.now.utc)
+    tweet
   end
 end
