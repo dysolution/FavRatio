@@ -3,16 +3,18 @@ require 'spec_helper'
 describe "Twitter User manager" do
 
   before do
-    tu1 = TwitterUser.create(crawling_enabled: true)
-    tu2 = TwitterUser.create(crawling_enabled: false)
+    create :twitter_user
+    create :twitter_user
+    create :twitter_user, crawling_enabled: true
   end
 
   it "should know which Twitter users to crawl" do
-    TwitterUser.crawlable.should_not be_empty
+    TwitterUser.count.should == 3
+    TwitterUser.crawlable.should have(1).entry
   end
 
   it "should be able to crawl all crawlable users" do
-    TwitterUser.should respond_to(:crawl_all)
+    TwitterUser.should respond_to :crawl_all
   end
 
   it "should crawl all crawlable users" do
@@ -21,33 +23,33 @@ describe "Twitter User manager" do
 end
 
 describe TwitterUser do
-  before(:each) do
-    @user = TwitterUser.new
+  before do
+    @user = build :twitter_user
   end
 
   it "should not allow duplicates" do
-    TwitterUser.create(twitter_uid: "1234")
-    TwitterUser.new(twitter_uid: "1234").should_not be_valid
+    create :twitter_user, twitter_uid: "1234"
+    build(:twitter_user, twitter_uid: "1234").should_not be_valid
   end
 
   context "when authoring a tweet" do
     before { @user.save! }
 
     it "can create the tweet externally" do
-      tweet1 = Tweet.create!(text: 'foo', author_id: @user)
-      tweet1.author.id.should == @user.id
-      @user.tweets.should include(tweet1)
+      tweet = create :tweet, author_id: @user.id
+      tweet.author.id.should == @user.id
+      @user.tweets.should include tweet
     end
 
-    it "can create the tweet directly in the user's collection" do 
-      tweet2 = @user.tweets.create!(text: 'bar')
-      tweet2.author.id.should == @user.id
-      @user.tweets.should include(tweet2)
+    it "can create the tweet directly in the user's collection" do
+      tweet = @user.tweets.create! text: 'bar'
+      tweet.author.id.should == @user.id
+      @user.tweets.should include tweet
     end
   end
 
   it "should provide an array of tweets it has authored" do
-    @user.tweets.should be_an(Array)
+    @user.tweets.should be_an Array
   end
 
   it "should know when its favs are stale" do
@@ -58,16 +60,16 @@ describe TwitterUser do
   it "should make the crawler wait between crawls" do
     user = @user.save
     @user.prepare_for_next_crawl
-    @user = TwitterUser.find(user)
-    next_crawl_time = (Time.now + 
+    @user = TwitterUser.find user
+    next_crawl_time = (Time.now +
                        (@user.crawl_interval - 1).minutes
                       ).utc
     @user.next_crawl_time.utc.should be > next_crawl_time
   end
-  
+
   describe "should not crawl" do
-    before(:each) do
-      @user = TwitterUser.create
+    before do
+      @user = create :twitter_user
     end
 
     example "if twitter_uid is missing" do

@@ -2,7 +2,12 @@ require 'spec_helper'
 
 describe Tweet do
 
-  before { @tweet = Tweet.new(author_id: 1, text: "foo") }
+  before do
+    @author = create :author
+    @tweet = create :tweet, author_id: @author.id
+    @faver = create :faver
+    @fav = @faver.favs.create tweet_id: @tweet.id
+  end
   subject { @tweet }
 
   context "validations include" do
@@ -25,17 +30,11 @@ describe Tweet do
   end
 
   it "should find its author correctly" do
-    user = TwitterUser.create!
-    user.tweets << @tweet
-    @tweet.author.should == user
+    @tweet.author.should == @author
   end
 
   it "should have the proper relationship to its favs" do
-    user = TwitterUser.create!
-    fav = Fav.create!(tweet_id: @tweet, faver_id: user)
-    @tweet.save
-    @tweet.favs.should include(fav)
-    user.favs.should include(fav)
+    @tweet.favs.should include @fav
   end
 end
 
