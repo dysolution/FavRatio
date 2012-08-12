@@ -1,4 +1,8 @@
 Favratio::Application.routes.draw do
+  ActiveAdmin.routes(self)
+
+  devise_for :admin_users, ActiveAdmin::Devise.config
+
   resources :favs
 
   resources :tweets
@@ -57,7 +61,7 @@ Favratio::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  # root :to => 'welcome#index'
+  root :to => 'twitter_users#index'
 
   # See how all your routes lay out with "rake routes"
 
